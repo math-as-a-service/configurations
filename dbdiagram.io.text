@@ -1,0 +1,44 @@
+Table expression {
+  id int [pk]
+  created datetime
+  updated datetime
+}
+
+Table operand {
+  id int [pk]
+  expression_id int [ref: > expression.id]
+  rank int
+  value varchar
+  type int
+}
+
+Table operator {
+  id int [pk]
+  expression_id int [ref: > expression.id]
+  rank int
+  value varchar
+  type int [ref: > value_types.id]
+}
+
+Table evaluation {
+  id int [pk]
+  expression_id int [ref: > expression.id]
+  result_id int [ref: > result.id]
+  status int [ref: > evaluation_statuses.id]
+}
+
+Table evaluation_statuses {
+  id int [pk]
+  label varchar
+}
+
+Table result {
+  id int [pk]
+  value varchar
+  type int [ref: > value_types.id]
+}
+
+Table value_types {
+  id int [pk]
+  label varchar
+}
