@@ -71,6 +71,6 @@ def put_operator_view():
     return put_operator()
 
 
-@app.route('/result', methods=['GET'])
-def get_result_view():
-    return get_result()
+@app.route('/result/<int:id>', methods=['GET'])
+def get_result_view(id):
+    return get_result(id)
