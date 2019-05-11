@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 
-import connexion
+from flask import Flask
 
-from swagger_server import encoder
+from swagger_server.controllers.expression_controller import add_expression
 
+app = Flask(__name__)
 
-def main():
-    app = connexion.App(__name__, specification_dir='./swagger/')
-    app.app.json_encoder = encoder.JSONEncoder
-    app.add_api('swagger.yaml', arguments={'title': 'RESTful Math-as-a-service'})
-    app.run(port=8080)
+@app.route('/expression', methods=['POST'])
+def post_expression_view():
+    return add_expression()
 
-
-if __name__ == '__main__':
-    main()
+@app.route('/expression', methods=['GET'])
+def get_expression_view():
+    return get_expression()
