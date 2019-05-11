@@ -2,6 +2,7 @@ import flask
 
 from swagger_server.models.evaluation import Evaluation
 from swagger_server.models.result import Result
+from swagger_server.services.evaluations import EvaluationService
 from swagger_server.util import ValidationError
 from peewee import IntegrityError, DoesNotExist
 
@@ -26,6 +27,10 @@ def add_evaluation(payload):  # noqa: E501
         evaluation = Evaluation.create(expression_id=payload.expression_id, status=Evaluation.STARTING, result_id=result.id)
     except IntegrityError as exc:
         raise ValidationError(400, 'Expression not found!')
+
+    # TODO: Thread this out
+    # Begins the work
+    EvaluationService().evaluate_expression(evaluation.id)
 
     return flask.jsonify({'evaluation_id' : evaluation.id})
 
