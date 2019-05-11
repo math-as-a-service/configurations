@@ -16,8 +16,6 @@ class EvaluationService(object):
             evaluation = Evaluation.get_by_id(evaluation_id)
         except DoesNotExist:
             return False
-        evaluation.status = Evaluation.EVALUATING
-        evaluation.save()
 
         if not evaluation:
             return False
@@ -34,8 +32,6 @@ class EvaluationService(object):
         valid = operands_valid and operators_valid
 
         if ((len(operators) + 1) != len(operands)) or not valid:
-            evaluation.status = Evaluation.ERRORED
-            evaluation.save()
             # Result is just gonna get nothing!
             return False
 
