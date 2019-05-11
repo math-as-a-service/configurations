@@ -119,7 +119,6 @@ def put_operand_view(id):
         return put_operand(id, post_body), 200
     except ValidationError as exc:
         return jsonify_validation_error(exc)
-    return put_operand(id)
 
 #
 # OPERATOR!
