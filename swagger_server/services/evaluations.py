@@ -69,8 +69,11 @@ class EvaluationService(object):
     def validate_operators(self, operators):
         for operator in operators:
             try:
-                # TODO: support floats
                 int(operator)
             except Exception:
-                return False
+                try:
+                    float(operator)
+                except Exception:
+                    return False
+
         return True
