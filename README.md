@@ -6,6 +6,13 @@
 ## Requirements
 Python 3.5.2+
 
+## Setup
+
+To create the local database and tables run:
+```
+export FLASK_APP=swagger_server/__main__.py; flask setup database
+```
+
 ## Usage
 To run the server, please execute the following from the root directory:
 
