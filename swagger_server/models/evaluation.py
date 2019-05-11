@@ -20,4 +20,4 @@ class Evaluation(FlaskModel):
     status = SmallIntegerField()
 
     def is_complete(self):
-        self.status == self.FINISHED
+        return self.status == self.FINISHED

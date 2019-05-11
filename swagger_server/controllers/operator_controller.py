@@ -17,17 +17,22 @@ def add_operator(payload):  # noqa: E501
         raise ValidationError(400, 'Couldn\'t parse JSON POST body.')
     if not payload.get('expression_id'):
         raise ValidationError(400, 'No expression_id field specified')
-    if not payload.get('rank'):
+    if payload.get('rank') is None:
         raise ValidationError(400, 'No rank field specified')
-    if not payload.get('value'):
+    if payload.get('value') is None:
         raise ValidationError(400, 'No value field specified')
     if not payload.get('type'):
         raise ValidationError(400, 'No type field specified')
     try:
-        operator = Operator.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
+        operator = Operator.create(
+            expression_id=payload['expression_id'],
+            rank=payload['rank'],
+            value=payload['value'],
+            type=payload['type'],
+        )
     except IntegrityError as exc:
         raise ValidationError(400, 'Expression not found!')
-    return flask.jsonify({'expression_id': operator.id})
+    return flask.jsonify({'operator_id': operator.id})
 
 
 def delete_operator(operator_id):  # noqa: E501
