@@ -10,12 +10,17 @@ from swagger_server.controllers.operator_controller import add_operator, delete_
 from swagger_server.controllers.result_controller import get_result
 from swagger_server.util import ValidationError, jsonify_validation_error
 from swagger_server.database.utils import create_database, create_table
+from swagger_server.util import ValidationError
 
 app = flask.Flask(__name__)
 setup_cli = flask.cli.AppGroup('setup')
 
 #
 # ROUTES!
+# ------------------------------------------------------------------------------
+
+#
+# EXPRESSIONS!
 # ------------------------------------------------------------------------------
 
 @app.route('/expression', methods=['POST'])
@@ -26,6 +31,9 @@ def post_expression_view():
 def get_expression_view(expression_id):
     return get_expression(expression_id)
 
+#
+# EVALUATION!
+# ------------------------------------------------------------------------------
 
 @app.route('/evaluation', methods=['POST'])
 def post_evaluation_view():
@@ -43,6 +51,9 @@ def get_evaluation_view(evaluation_id):
     except ValidationError as exc:
         return jsonify_validation_error(exc)
 
+#
+# OPERAND!
+# ------------------------------------------------------------------------------
 
 @app.route('/operand', methods=['POST'])
 def add_operand_view():
@@ -63,6 +74,9 @@ def get_operand_view(id):
 def put_operand_view(id):
     return put_operand(id)
 
+#
+# OPERATOR!
+# ------------------------------------------------------------------------------
 
 @app.route('/operator', methods=['POST'])
 def add_operator_view():
@@ -83,9 +97,16 @@ def get_operator_view(id):
 def put_operator_view(id):
     return put_operator(id)
 
-@app.route('/result/<int:id>', methods=['GET'])
-def get_result_view(id):
-    return get_result(id)
+#
+# RESULT!
+# ------------------------------------------------------------------------------
+
+@app.route('/result/<int:result_id>', methods=['GET'])
+def get_result_view(result_id):
+    if not result_id:
+        raise ValidationError(400, 'An evaluation result ID is required!')
+
+    return get_result(result_id)
 
 #
 # COMMANDS!
