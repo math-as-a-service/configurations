@@ -1,7 +1,6 @@
 import flask
-import peewee
+from peewee import IntegrityError
 
-from swagger_server import util
 from swagger_server.models.operator import Operator
 from swagger_server.util import ValidationError
 
@@ -26,7 +25,7 @@ def add_operator(payload):  # noqa: E501
         raise ValidationError(400, 'No type field specified')
     try:
         operator = Operator.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
-    except peewee.IntegrationException as exc:
+    except IntegrityError as exc:
         raise ValidationError(400, 'Expression not found!')
     return flask.jsonify({'expression_id': operator.id})
 
@@ -81,6 +80,6 @@ def put_operator(operator_id, payload):  # noqa: E501
         operator.value = payload['value']
         operator.type = payload['type']
         operator.save()
-    except peewee.IntegrationException as exc:
+    except IntegrityError as exc:
         raise ValidationError(400, 'Expression not found!')
     return flask.jsonify(operator.api_serialize())
