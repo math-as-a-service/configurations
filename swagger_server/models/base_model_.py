@@ -69,5 +69,12 @@ class FlaskModel(Model):
         """Returns true if both objects are not equal"""
         return not self == other
 
+    def api_serialize(self):
+        serialized_object = {}
+        for field in self._meta.fields:
+            serialized_object[field] = getattr(self, field, None)
+
+        return serialized_object
+
     class Meta:
         database = MySQLDatabase('maas', user='maas_user', password='maas_password')
