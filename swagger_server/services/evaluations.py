@@ -34,7 +34,8 @@ class EvaluationService(object):
         operators = Operator.get(Operator.expression_id == expression_id)
         operands_valid = self.validate_operands(operands)
         operators_valid = self.validate_operators(operators)
-        if (len(operators) + 1) != len(operands):
+        valid = operands_valid and operators_valid
+        if ((len(operators) + 1) != len(operands)) or not valid:
             evaluation.status = Evaluation.ERRORED
             evaluation.save()
             # Result is just gonna get nothing!
