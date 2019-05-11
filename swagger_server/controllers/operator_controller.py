@@ -1,7 +1,11 @@
+import flask
+
 from swagger_server import util
+from swagger_server.models.evaluation import Operator
+from swagger_server.util import ValidationError
 
 
-def add_operator():  # noqa: E501
+def add_operator(payload):  # noqa: E501
     """Create an operator
 
     Creates an operator # noqa: E501
@@ -9,7 +13,15 @@ def add_operator():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    if not payload:
+        raise ValidationError(400, 'Couldn\'t parse JSON POST body.')
+    if not payload.get('id'):
+        raise ValidationError(400, 'No id field specified')
+    try:
+        operator = Operator.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
+    except Exception as exc:
+        raise ValidationError(400, 'Expression not found!')
+    return flask.jsonify({'expression_id': operator.expression_id})
 
 
 def delete_operator(operator_id):  # noqa: E501
@@ -22,7 +34,11 @@ def delete_operator(operator_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    try:
+        operand = Operator.delete().where(Operator.id == operator_id)
+    except Exception as exc:
+        raise ValidationError(400, 'Expression not found!')
+    return flask.jsonify({'expression_id': operator_id})
 
 
 def get_operator(operator_id):  # noqa: E501
@@ -35,10 +51,14 @@ def get_operator(operator_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    try:
+        operator = Operator.get_by_id(operator_id)
+    except Exception as exc:
+        raise ValidationError(400, 'Expression not found!')
+    return flask.jsonify({'id': operator_id})
 
 
-def put_operator(operator_id):  # noqa: E501
+def put_operator(operator_id, payload):  # noqa: E501
     """Update operator object
 
     Update operator object # noqa: E501
@@ -48,4 +68,12 @@ def put_operator(operator_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    if not payload:
+        raise ValidationError(400, 'Couldn\'t parse JSON POST body.')
+    if not payload.get('id'):
+        raise ValidationError(400, 'No id field specified')
+    try:
+        operator = Operator.update(payload).where(id=operator_id).execute()
+    except Exception as exc:
+        raise ValidationError(400, 'Expression not found!')
+    return flask.jsonify({'id': operator_id})

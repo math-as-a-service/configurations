@@ -39,42 +39,73 @@ def get_evaluation_view(evaluation_id):
 
 @app.route('/operand', methods=['POST'])
 def add_operand_view():
-    return add_operand()
+    try:
+        post_body = request.get_json()
+        return add_operand(post_body), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 
 @app.route('/operand/<int:id>', methods=['DELETE'])
 def delete_operand_view(id):
+    try:
+        return delete_operand(id), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
     return delete_operand(id)
 
 
 @app.route('/operand/<int:id>', methods=['GET'])
 def get_operand_view(id):
+    try:
+        return get_operand(id), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
     return get_operand(id)
 
 
 @app.route('/operand/<int:id>', methods=['PUT'])
 def put_operand_view(id):
+    try:
+        post_body = request.get_json()
+        return put_operand(id, post_body), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
     return put_operand(id)
 
 
 @app.route('/operator', methods=['POST'])
 def add_operator_view():
-    return add_operator()
+    try:
+        post_body = request.get_json()
+        return add_operator(post_body), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 
 @app.route('/operator/<int:id>', methods=['DELETE'])
 def delete_operator_view(id):
-    return delete_operator(id)
+    try:
+        return delete_operator(id), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 
 @app.route('/operator/<int:id>', methods=['GET'])
 def get_operator_view(id):
-    return get_operator(id)
+    try:
+        return get_operator(id), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 
 @app.route('/operator/<int:id>', methods=['PUT'])
 def put_operator_view(id):
-    return put_operator(id)
+    try:
+        post_body = request.get_json()
+        return put_operator(id, post_body), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 @app.route('/result/<int:id>', methods=['GET'])
 def get_result_view(id):
