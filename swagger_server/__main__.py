@@ -12,4 +12,4 @@ def post_expression_view():
 
 @app.route('/expression', methods=['GET'])
 def get_expression_view():
-    return add_expression()
+    return get_expression()
