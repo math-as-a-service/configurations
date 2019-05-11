@@ -1,6 +1,6 @@
 import datetime
 import flask
-
+from peewee import DoesNotExist
 from swagger_server.models.expression import Expression
 from swagger_server.util import ValidationError
 
@@ -14,11 +14,11 @@ def add_expression():  # noqa: E501
     :rtype: None
     """
     try:
-        Expression.create()
+        result = Expression.create()
     except Exception as exc:
         raise ValidationError(400, 'Expression was not created')
 
-    return flask.jsonify(True)
+    return flask.jsonify(result.api_serialize())
 
 
 def delete_expression(expression_id):  # noqa: E501
@@ -46,7 +46,12 @@ def get_expression(expression_id):  # noqa: E501
 
     :rtype: None
     """
-    return Expression.get_by_id(expression_id)
+    try:
+        result = Expression.get_by_id(expression_id)
+    except DoesNotExist:
+        raise ValidationError(404, 'Expression id ({}) not found.'.format(expression_id))
+
+    return flask.jsonify(result.api_serialize())
 
 
 def put_expression(expression_id):  # noqa: E501
@@ -59,7 +64,12 @@ def put_expression(expression_id):  # noqa: E501
 
     :rtype: None
     """
-    row = Expression.get_by_id(expression_id)
+    try:
+        row = Expression.get_by_id(expression_id)
+    except DoesNotExist:
+        raise ValidationError(404, 'Expression id ({}) not found.'.format(expression_id))
+
     row.updated = datetime.datetime.now()
-    result = row.save()
-    return flask.jsonify({'expression_id': expression_id, 'rows_updated': result})
+    row.save()
+
+    return flask.jsonify(row.api_serialize())
