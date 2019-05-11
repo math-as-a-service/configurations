@@ -12,7 +12,7 @@ class Evaluation(FlaskModel):
 
     Do not edit the class manually.
     """
-    STARTING, EVALUATING, FINISHED = range(3)
+    STARTING, EVALUATING, FINISHED, ERRORED = range(4)
 
     id = AutoField()
     expression_id = ForeignKeyField(Expression)
