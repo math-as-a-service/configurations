@@ -5,6 +5,8 @@ from swagger_server.models.operand import Operand
 from swagger_server.models.operator import Operator
 from swagger_server.models.result import Result
 
+VALID_OPERANDS = {'+', '-', '/', '*', '**', '%', '//'}
+
 class EvaluationService(object):
 
     def __init__(self, input_checked=True):
@@ -25,6 +27,8 @@ class EvaluationService(object):
 
         operands = Operand.get(Operand.expression_id == expression_id)
         operators = Operator.get(Operator.expression_id == expression_id)
+        operands_valid = self.validate_operands(operands)
+        operators_valid = self.validate_operators(operators)
         if (len(operators) + 1) != len(operands):
             evaluation.status = Evaluation.ERRORED
             evaluation.save()
@@ -52,3 +56,19 @@ class EvaluationService(object):
 
         return True
 
+
+    def validate_operands(self, operands):
+        for operand in operands:
+            if operand not in VALID_OPERANDS:
+                return False
+        return True
+
+
+    def validate_operators(self, operators):
+        for operator in operators:
+            try:
+                # TODO: support floats
+                int(operator)
+            except Exception:
+                return False
+        return True
