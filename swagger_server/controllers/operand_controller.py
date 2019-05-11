@@ -21,7 +21,7 @@ def add_operand(payload):  # noqa: E501
         operand = Operand.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
     except Exception as exc:
         raise ValidationError(400, 'Expression not found!')
-    return flask.jsonify({'expression_id': operator.expression_id})
+    return flask.jsonify({'operand_id': operand.id})
 
 
 def delete_operand(operand_id):  # noqa: E501
