@@ -42,7 +42,7 @@ class EvaluationService(object):
         final_expression = []
         for index, operand in enumerate(sorted_operands):
             final_expression.append(operand)
-            if index < len(sorted_operators - 1):
+            if index < len(sorted_operators):
                 final_expression.append(sorted_operators[index])
 
         # final_expression should be a list of interleaved operands and operators
