@@ -13,15 +13,15 @@ def get_result(result_id):
     try:
         result = Result.get_by_id(result_id)
     except DoesNotExist:
-        raise ValidationError(404, 'Result at ID ({}) not found.'.found(result_id))
+        raise ValidationError(404, 'Result at ID ({}) not found.'.format(result_id))
 
     try:
         evaluation = Evaluation.get(Evaluation.result_id == result.id)
     except DoesNotExist:
-        raise ValidationError(404, 'Evaluation for Result at ID ({}) not found.'.found(result.id))
+        raise ValidationError(404, 'Evaluation for Result at ID ({}) not found.'.format(result.id))
 
     if not evaluation.is_complete():
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/425
-        raise ValidationError(425, 'Evaluation for Result at ID ({}) not found.'.found(result.id))
+        raise ValidationError(425, 'Evaluation for Result at ID ({}) not found.'.format(result.id))
 
     return flask.jsonify(result.api_serialize())
