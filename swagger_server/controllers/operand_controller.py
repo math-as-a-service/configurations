@@ -20,7 +20,7 @@ def add_operand(payload):  # noqa: E501
         raise ValidationError(400, 'No expression_id field specified')
     if payload.get('rank') is None:
         raise ValidationError(400, 'No rank field specified')
-    if not payload.get('value'):
+    if payload.get('value') is None:
         raise ValidationError(400, 'No value field specified')
     if not payload.get('type'):
         raise ValidationError(400, 'No type field specified')
