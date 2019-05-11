@@ -38,7 +38,10 @@ def post_evaluation_view():
 
 @app.route('/evaluation/<int:evaluation_id>', methods=['GET'])
 def get_evaluation_view(evaluation_id):
-    return get_evaluation(evaluation_id)
+    try:
+        return get_evaluation(evaluation_id)
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 
 @app.route('/operand', methods=['POST'])
