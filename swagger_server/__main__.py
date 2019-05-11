@@ -58,6 +58,15 @@ def get_evaluation_view(evaluation_id):
 
 @app.route('/operand', methods=['POST'])
 def add_operand_view():
+    """
+    Requires a json in this format:
+    {
+        "expression_id": 1,
+         "rank": 2,
+         "value": "3",
+         "type": 4
+    }
+    """
     try:
         post_body = request.get_json()
         return add_operand(post_body), 200
