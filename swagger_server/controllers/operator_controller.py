@@ -15,7 +15,7 @@ def add_operator(payload):  # noqa: E501
     """
     if not payload:
         raise ValidationError(400, 'Couldn\'t parse JSON POST body.')
-    if not payload.get('id'):
+    if not payload.get('expression_id'):
         raise ValidationError(400, 'No id field specified')
     try:
         operator = Operator.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
