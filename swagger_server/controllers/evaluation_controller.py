@@ -1,17 +1,10 @@
 import flask
 
-from swagger_server import util
 from swagger_server.models.evaluation import Evaluation
 from swagger_server.models.result import Result
 from swagger_server.util import ValidationError
-from peewee import IntegrityError
+from peewee import IntegrityError, DoesNotExist
 
-'''
-    id = AutoField()
-    expression_id = ForeignKeyField(Expression)
-    result_id = IntegerField() # TODO: Make AutoField
-    status = SmallIntegerField()
-'''
 
 def add_evaluation(payload):  # noqa: E501
     """Begin evaluation of an expression
@@ -48,8 +41,9 @@ def get_evaluation(evaluation_id):  # noqa: E501
     :rtype: None
     """
 
-    evaluation = Evaluation.get_by_id(id)
-    return flask.jsonify({'evaluation_id' : evaluation.id
-                          'expression_id' : evaluation.expression_id,
-                          'result_id' : evaluation.result_id,
-                          'status' : evaluation.status})
+    try:
+        evaluation = Evaluation.get_by_id(evaluation_id)
+    except DoesNotExist:
+        raise ValidationError(404, 'Evaluation ID ({}) not found.'.format(evaluation_id))
+
+    return flask.jsonify(evaluation.api_serialize())
