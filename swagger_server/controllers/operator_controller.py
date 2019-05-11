@@ -2,7 +2,7 @@ import flask
 import peewee
 
 from swagger_server import util
-from swagger_server.models.evaluation import Operator
+from swagger_server.models.operator import Operator
 from swagger_server.util import ValidationError
 
 
