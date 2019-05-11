@@ -5,6 +5,8 @@ from swagger_server.models.operand import Operand
 from swagger_server.models.operator import Operator
 from swagger_server.models.result import Result
 
+from peewee import *
+
 VALID_OPERANDS = {'+', '-', '/', '*', '**', '%', '//'}
 
 class EvaluationService(object):
@@ -13,7 +15,10 @@ class EvaluationService(object):
         self.input_checked = input_checked
 
     def evaluate_expression(self, evaluation_id):
-        evaluation = Evaluation.get_by_id(evaluation_id)
+        try:
+            evaluation = Evaluation.get_by_id(evaluation_id)
+        except DoesNotExist:
+            return False
         evaluation.status = Evaluation.EVALUATING
         evaluation.save()
 
@@ -58,10 +63,7 @@ class EvaluationService(object):
 
 
     def validate_operands(self, operands):
-        for operand in operands:
-            if operand not in VALID_OPERANDS:
-                return False
-        return True
+        return all([operand in VALID_OPERANDS for operand in operands])
 
 
     def validate_operators(self, operators):
