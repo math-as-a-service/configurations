@@ -4,6 +4,7 @@ import six
 import typing
 
 from swagger_server import util
+from peewee import MySQLDatabase
 
 T = typing.TypeVar('T')
 
@@ -67,3 +68,6 @@ class FlaskModel(object):
     def __ne__(self, other):
         """Returns true if both objects are not equal"""
         return not self == other
+
+    class Meta:
+        database = MySQLDatabase('maas', user='maas_user', password='maas_password')
