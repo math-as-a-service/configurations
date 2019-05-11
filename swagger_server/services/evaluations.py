@@ -11,6 +11,46 @@ VALID_OPERATORS = {'+', '-', '/', '*', '**', '%', '//', '<', '>', '<=', '>=', '=
 
 class EvaluationService(object):
 
+    def get_finalized_expression(self, evaluation_id):
+        try:
+            evaluation = Evaluation.get_by_id(evaluation_id)
+        except DoesNotExist:
+            return False
+        evaluation.status = Evaluation.EVALUATING
+        evaluation.save()
+
+        if not evaluation:
+            return False
+
+        expression_id = evaluation.expression_id
+        result_id = evaluation.result_id
+
+        result = Result.get_by_id(result_id)
+
+        operands = Operand.select().where(Operand.expression_id == expression_id).execute()
+        operators = Operator.select().where(Operator.expression_id == expression_id).execute()
+        operands_valid = self.validate_operands(operands)
+        operators_valid = self.validate_operators(operators)
+        valid = operands_valid and operators_valid
+
+        if ((len(operators) + 1) != len(operands)) or not valid:
+            evaluation.status = Evaluation.ERRORED
+            evaluation.save()
+            # Result is just gonna get nothing!
+            return False
+
+        # I.e. ['+', '-']
+        sorted_operators = sorted(operators, key=attrgetter('rank'))
+        # I.e. ['1', '7', '3']
+        sorted_operands = sorted(operands, key=attrgetter('rank'))
+        final_expression = []
+        for index, operand in enumerate(sorted_operands):
+            final_expression.append(operand.value)
+            if index < len(sorted_operators):
+                final_expression.append(sorted_operators[index].value)
+
+        return ' '.join(final_expression)
+
     def evaluate_expression(self, evaluation_id):
         try:
             evaluation = Evaluation.get_by_id(evaluation_id)
