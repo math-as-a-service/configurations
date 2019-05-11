@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
 import flask
+from flask import request
 
 from swagger_server.controllers.expression_controller import add_expression, get_expression
 from swagger_server.controllers.evaluation_controller import add_evaluation, get_evaluation
 from swagger_server.controllers.operand_controller import add_operand, delete_operand, get_operand, put_operand
 from swagger_server.controllers.operator_controller import add_operator, delete_operator, get_operator, put_operator
 from swagger_server.controllers.result_controller import get_result
+from swagger_server.util import ValidationError, jsonify_validation_error
 
 app = flask.Flask(__name__)
-
 
 @app.route('/expression', methods=['POST'])
 def post_expression_view():
@@ -23,9 +24,11 @@ def get_expression_view(expression_id):
 
 @app.route('/evaluation', methods=['POST'])
 def post_evaluation_view():
-    post_body = request.POST
-
-    return add_evaluation(post_body)
+    try:
+        post_body = request.get_json()
+        return add_evaluation(post_body), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 
 @app.route('/evaluation/<int:evaluation_id>', methods=['GET'])

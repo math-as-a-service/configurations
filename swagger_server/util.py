@@ -1,8 +1,17 @@
 import datetime
 
+import flask
 import six
 import typing
 
+
+class ValidationError(Exception):
+    def __init__(self, status_code, message):
+        self.status_code = status_code
+        self.message = message
+
+def jsonify_validation_error(validation_error):
+    return flask.jsonify({'error' : validation_error.message}), validation_error.status_code
 
 def _deserialize(data, klass):
     """Deserializes dict, list, str into an object.
