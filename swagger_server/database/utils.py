@@ -13,9 +13,9 @@ from peewee import MySQLDatabase
 
 
 MODEL_CONSTRUCTORS = [
+    Expression,
     Evaluation,
     EvaluationStatus,
-    Expression,
     Operand,
     Operator,
     Result,
