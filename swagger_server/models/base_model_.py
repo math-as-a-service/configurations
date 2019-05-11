@@ -8,7 +8,7 @@ from swagger_server import util
 T = typing.TypeVar('T')
 
 
-class Model(object):
+class FlaskModel(object):
     # swaggerTypes: The key is attribute name and the
     # value is attribute type.
     swagger_types = {}
