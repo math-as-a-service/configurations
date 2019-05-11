@@ -1,6 +1,5 @@
 import flask
 
-from swagger_server import util
 from swagger_server.models.expression import Expression
 from swagger_server.util import ValidationError
 
@@ -31,7 +30,9 @@ def delete_expression(expression_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    row = Expression.get_or_none(Expression.id == expression_id)
+    result = row.delete_instance() if row else 0
+    return flask.jsonify({'expression_id': expression_id, 'rows_deleted': result})
 
 
 def get_expression(expression_id):  # noqa: E501
