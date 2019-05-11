@@ -7,7 +7,7 @@ from swagger_server.models.result import Result
 
 from peewee import *
 
-VALID_OPERANDS = {'+', '-', '/', '*', '**', '%', '//'}
+VALID_OPERATORS = {'+', '-', '/', '*', '**', '%', '//'}
 
 class EvaluationService(object):
 
@@ -30,11 +30,12 @@ class EvaluationService(object):
 
         result = Result.get_by_id(result_id)
 
-        operands = Operand.select().where(Operand.expression_id == expression_id)
-        operators = Operator.select().where(Operator.expression_id == expression_id)
+        operands = Operand.select().where(Operand.expression_id == expression_id).execute()
+        operators = Operator.select().where(Operator.expression_id == expression_id).execute()
         operands_valid = self.validate_operands(operands)
         operators_valid = self.validate_operators(operators)
         valid = operands_valid and operators_valid
+
         if ((len(operators) + 1) != len(operands)) or not valid:
             evaluation.status = Evaluation.ERRORED
             evaluation.save()
@@ -47,9 +48,9 @@ class EvaluationService(object):
         sorted_operands = sorted(operands, key=attrgetter('rank'))
         final_expression = []
         for index, operand in enumerate(sorted_operands):
-            final_expression.append(operand)
+            final_expression.append(operand.value)
             if index < len(sorted_operators):
-                final_expression.append(sorted_operators[index])
+                final_expression.append(sorted_operators[index].value)
 
         # final_expression should be a list of interleaved operands and operators
         # I.e. ['1', '+', '7', '-', '3']
@@ -63,17 +64,17 @@ class EvaluationService(object):
         return True
 
 
-    def validate_operands(self, operands):
-        return all([operand in VALID_OPERANDS for operand in operands])
-
-
     def validate_operators(self, operators):
-        for operator in operators:
+        return all([operator.value in VALID_OPERATORS for operator in operators])
+
+
+    def validate_operands(self, operands):
+        for operand in operands:
             try:
-                int(operator)
+                int(operand.value)
             except Exception:
                 try:
-                    float(operator)
+                    float(operand.value)
                 except Exception:
                     return False
 
