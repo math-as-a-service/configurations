@@ -18,7 +18,13 @@ def add_operand(payload):  # noqa: E501
     if not payload:
         raise ValidationError(400, 'Couldn\'t parse JSON POST body.')
     if not payload.get('expression_id'):
-        raise ValidationError(400, 'No id field specified')
+        raise ValidationError(400, 'No expression_id field specified')
+    if not payload.get('rank'):
+        raise ValidationError(400, 'No rank field specified')
+    if not payload.get('value'):
+        raise ValidationError(400, 'No value field specified')
+    if not payload.get('type'):
+        raise ValidationError(400, 'No type field specified')
     try:
         operand = Operand.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
     except peewee.IntegrationException as exc:
@@ -36,11 +42,8 @@ def delete_operand(operand_id):  # noqa: E501
 
     :rtype: None
     """
-    try:
-        operand = Operand.delete().where(Operand.id == operand_id)
-    except Exception as exc:
-        raise ValidationError(404, 'Operand not found!')
-    return flask.jsonify(True)
+    operand = Operand.delete_by_id(operand_id)
+    return flask.jsonify(operand == 1)
 
 
 def get_operand(operand_id):  # noqa: E501

@@ -36,7 +36,6 @@ def post_evaluation_view():
 def get_evaluation_view(evaluation_id):
     return get_evaluation(evaluation_id)
 
-
 @app.route('/operand', methods=['POST'])
 def add_operand_view():
     try:
@@ -45,15 +44,12 @@ def add_operand_view():
     except ValidationError as exc:
         return jsonify_validation_error(exc)
 
-
 @app.route('/operand/<int:id>', methods=['DELETE'])
 def delete_operand_view(id):
     try:
         return delete_operand(id), 200
     except ValidationError as exc:
         return jsonify_validation_error(exc)
-    return delete_operand(id)
-
 
 @app.route('/operand/<int:id>', methods=['GET'])
 def get_operand_view(id):
@@ -61,7 +57,6 @@ def get_operand_view(id):
         return get_operand(id), 200
     except ValidationError as exc:
         return jsonify_validation_error(exc)
-    return get_operand(id)
 
 
 @app.route('/operand/<int:id>', methods=['PUT'])
