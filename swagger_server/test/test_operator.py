@@ -1,10 +1,10 @@
-class TestOperand:
-    def test_add_and_get_operand(self, client):
-        response = client.post('/operand')
+class TestOperator:
+    def test_add_and_get_operator(self, client):
+        response = client.post('/operator')
         assert response.status_code == 400
 
         response = client.post(
-            '/operand',
+            '/operator',
             json={
                 'expression_id': None,
             }
@@ -13,7 +13,7 @@ class TestOperand:
 
         expression_response = client.post('/expression')
         response = client.post(
-            '/operand',
+            '/operator',
             json={
                 'expression_id': expression_response.json['id'],
                 'rank': 0,
@@ -23,17 +23,17 @@ class TestOperand:
         )
         assert response.status_code == 200
 
-        response = client.get('/operand/{}'.format(response.json['operand_id']))
+        response = client.get('/operator/{}'.format(response.json['operator_id']))
         assert response.status_code == 200
         assert response.json['id'] is not None
 
-    def test_delete_operand(self, client):
-        response = client.delete('/operand/dne')
+    def test_delete_operator(self, client):
+        response = client.delete('/operator/dne')
         assert response.status_code == 404
 
         expression_response = client.post('/expression')
-        operand_response = client.post(
-            '/operand',
+        operator_response = client.post(
+            '/operator',
             json={
                 'expression_id': expression_response.json['id'],
                 'rank': 0,
@@ -41,7 +41,7 @@ class TestOperand:
                 'type': 4,
             }
         )
-        response = client.delete('/operand/{}'.format(
-            operand_response.json['operand_id'],
+        response = client.delete('/operator/{}'.format(
+            operator_response.json['operator_id'],
         ))
         assert response.status_code == 200
