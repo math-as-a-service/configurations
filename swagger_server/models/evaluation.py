@@ -4,8 +4,10 @@ from __future__ import absolute_import
 from datetime import date, datetime  # noqa: F401
 
 from typing import List, Dict  # noqa: F401
+from peewee import *
 
 from swagger_server.models.base_model_ import FlaskModel
+from swagger_server.models import Expression
 from swagger_server import util
 
 
@@ -14,6 +16,11 @@ class Evaluation(FlaskModel):
 
     Do not edit the class manually.
     """
+
+    id = AutoField()
+    expression_id = ForeignKeyField(Expression)
+    result_id = IntegerField()
+    status = SmallIntegerField()
 
     def __init__(self, id: int=None, expression_id: int=None, result_id: int=None, status: int=None):  # noqa: E501
         """Evaluation - a model defined in Swagger

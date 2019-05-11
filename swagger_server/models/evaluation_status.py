@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from datetime import date, datetime  # noqa: F401
 
 from typing import List, Dict  # noqa: F401
+from peewee import *
 
 from swagger_server.models.base_model_ import FlaskModel
 from swagger_server import util
@@ -14,6 +15,9 @@ class EvaluationStatus(FlaskModel):
 
     Do not edit the class manually.
     """
+
+    id = AutoField()
+    label = CharField()
 
     def __init__(self, id: int=None, label: str=None):  # noqa: E501
         """EvaluationStatus - a model defined in Swagger
