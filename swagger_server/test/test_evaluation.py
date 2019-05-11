@@ -1,26 +1,32 @@
-# class TestEvaluation:
-#     def test_get(self, client):
-#         response = client.get('/evaluation/dne')
-#         assert response.status_code == 404
+class TestEvaluation:
+    def test_get(self, client):
+        response = client.get('/evaluation/dne')
+        assert response.status_code == 404
 
-#     def test_create(self, client):
-#         response = client.post(
-#             '/evaluation',
-#             json='chonus',
-#         )
+    def test_get_and_create(self, client):
+        response = client.post(
+            '/evaluation',
+            json='chonus',
+        )
 
-#         assert response.status_code == 400
+        assert response.status_code == 400
 
-#         response = client.post(
-#             '/evaluation',
-#             json={
-#                 'expression_id': None,
-#             },
-#         )
+        response = client.post(
+            '/evaluation',
+            json={
+                'expression_id': None,
+            },
+        )
 
-#         assert response.status_code == 400
+        assert response.status_code == 400
 
-#         expression_response = client.post('/expression')
-#         import pdb
-#         pdb.set_trace()
-#         print(expression_response.json())
+        expression_response = client.post('/expression')
+        response = client.post(
+            '/evaluation',
+            json={
+                'expression_id': expression_response.json['id'],
+            },
+        )
+        assert response.status_code == 200
+        assert response.json['evaluation_id'] is not None
+

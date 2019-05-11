@@ -21,10 +21,14 @@ def add_evaluation(payload):  # noqa: E501
         raise ValidationError(400, 'No expression_id field specified')
 
     # Work
-    result = Result.create(value='', type='')
+    result = Result.create(value='', type=4)
 
     try:
-        evaluation = Evaluation.create(expression_id=payload.expression_id, status=Evaluation.STARTING, result_id=result.id)
+        evaluation = Evaluation.create(
+            expression_id=payload['expression_id'],
+            status=Evaluation.STARTING,
+            result_id=result.id,
+        )
     except IntegrityError as exc:
         raise ValidationError(400, 'Expression not found!')
 
