@@ -23,7 +23,9 @@ def get_expression_view(expression_id):
 
 @app.route('/evaluation', methods=['POST'])
 def post_evaluation_view():
-    return add_evaluation()
+    post_body = request.POST
+
+    return add_evaluation(post_body)
 
 
 @app.route('/evaluation/<int:evaluation_id>', methods=['GET'])
