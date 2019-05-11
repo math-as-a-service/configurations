@@ -1,14 +1,14 @@
 from connexion.apps.flask_app import FlaskJSONEncoder
 import six
 
-from swagger_server.models.base_model_ import Model
+from swagger_server.models.base_model_ import FlaskModel
 
 
 class JSONEncoder(FlaskJSONEncoder):
     include_nulls = False
 
     def default(self, o):
-        if isinstance(o, Model):
+        if isinstance(o, FlaskModel):
             dikt = {}
             for attr, _ in six.iteritems(o.swagger_types):
                 value = getattr(o, attr)

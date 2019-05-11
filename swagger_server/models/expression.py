@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 from peewee import *
 
-from swagger_server.models.base_model_ import Model as FlaskModel
+from swagger_server.models.base_model_ import FlaskModel
 from swagger_server import util
 
 
@@ -16,7 +16,7 @@ class Expression(Model, FlaskModel):
     Do not edit the class manually.
     """
 
-    id = IntegerField()
+    id = AutoField()
     created = DateTimeField(default=datetime.datetime.now)
     updated = DateTimeField(default=datetime.datetime.now)
 
