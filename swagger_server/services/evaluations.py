@@ -7,7 +7,7 @@ from swagger_server.models.result import Result
 
 from peewee import *
 
-VALID_OPERANDS = {'+', '-', '/', '*', '**', '%', '//', '<', '>', '<=', '>=', '=='}
+VALID_OPERATORS = {'+', '-', '/', '*', '**', '%', '//', '<', '>', '<=', '>=', '=='}
 
 class EvaluationService(object):
 
