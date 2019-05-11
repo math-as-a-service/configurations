@@ -10,7 +10,6 @@ from swagger_server import util
 
 from peewee import *
 
-from swagger_server.models.base_model_ import FlaskModel
 
 from swagger_server.models import Expression
 
