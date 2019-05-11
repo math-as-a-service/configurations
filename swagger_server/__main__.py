@@ -20,15 +20,15 @@ def get_expression_view():
 def add_operand_view():
     return add_operand()
 
-@app.route('/operand', methods=['DELETE'])
+@app.route('/operand/<int:id>', methods=['DELETE'])
 def delete_operand_view():
     return delete_operand()
 
-@app.route('/operand', methods=['GET'])
+@app.route('/operand/<int:id>', methods=['GET'])
 def get_operand_view():
     return get_operand()
 
-@app.route('/operand', methods=['PUT'])
+@app.route('/operand/<int:id>', methods=['PUT'])
 def put_operand_view():
     return put_operand()
 
@@ -36,15 +36,15 @@ def put_operand_view():
 def add_operator_view():
     return add_operator()
 
-@app.route('/operator', methods=['DELETE'])
+@app.route('/operator/<int:id>', methods=['DELETE'])
 def delete_operator_view():
     return delete_operator()
 
-@app.route('/operator', methods=['GET'])
+@app.route('/operator/<int:id>', methods=['GET'])
 def get_operator_view():
     return get_operator()
 
-@app.route('/operator', methods=['PUT'])
+@app.route('/operator/<int:id>', methods=['PUT'])
 def put_operator_view():
     return put_operator()
 
