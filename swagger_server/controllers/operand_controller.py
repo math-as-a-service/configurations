@@ -81,4 +81,4 @@ def put_operand(operand_id, payload):  # noqa: E501
         operand.save()
     except peewee.IntegrationException as exc:
         raise ValidationError(400, 'Expression not found!')
-    return flask.jsonify({'id': operand_id})
+    return flask.jsonify(operand.api_serialize())
