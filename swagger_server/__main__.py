@@ -38,12 +38,18 @@ def delete_expression_view(expression_id):
 
 @app.route('/expression/<int:expression_id>', methods=['GET'])
 def get_expression_view(expression_id):
-    return get_expression(expression_id)
+    try:
+        return get_expression(expression_id)
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 
 @app.route('/expression/<int:expression_id>', methods=['PUT'])
 def put_expression_view(expression_id):
-    return put_expression(expression_id)
+    try:
+        return put_expression(expression_id)
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 
 @app.route('/evaluation', methods=['POST'])

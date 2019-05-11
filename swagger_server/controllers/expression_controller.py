@@ -62,4 +62,4 @@ def put_expression(expression_id):  # noqa: E501
     row = Expression.get_by_id(expression_id)
     row.updated = datetime.datetime.now()
     result = row.save()
-    return flask.jsonify({'expression_id': expression_id, 'updated': result})
+    return flask.jsonify({'expression_id': expression_id, 'rows_updated': result})
