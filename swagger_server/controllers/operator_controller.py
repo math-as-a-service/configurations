@@ -1,4 +1,5 @@
 import flask
+import peewee
 
 from swagger_server import util
 from swagger_server.models.evaluation import Operator
@@ -19,9 +20,9 @@ def add_operator(payload):  # noqa: E501
         raise ValidationError(400, 'No id field specified')
     try:
         operator = Operator.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
-    except Exception as exc:
+    except peewee.IntegrationException as exc:
         raise ValidationError(400, 'Expression not found!')
-    return flask.jsonify({'expression_id': operator.expression_id})
+    return flask.jsonify({'expression_id': operator.id})
 
 
 def delete_operator(operator_id):  # noqa: E501
@@ -37,8 +38,8 @@ def delete_operator(operator_id):  # noqa: E501
     try:
         operand = Operator.delete().where(Operator.id == operator_id)
     except Exception as exc:
-        raise ValidationError(400, 'Expression not found!')
-    return flask.jsonify({'expression_id': operator_id})
+        raise ValidationError(404, 'Operator not found!')
+    return flask.jsonify(True)
 
 
 def get_operator(operator_id):  # noqa: E501
@@ -54,8 +55,8 @@ def get_operator(operator_id):  # noqa: E501
     try:
         operator = Operator.get_by_id(operator_id)
     except Exception as exc:
-        raise ValidationError(400, 'Expression not found!')
-    return flask.jsonify({'id': operator_id})
+        raise ValidationError(404, 'Operand not found!')
+    return flask.jsonify(operator.api_serialize())
 
 
 def put_operator(operator_id, payload):  # noqa: E501
@@ -70,10 +71,13 @@ def put_operator(operator_id, payload):  # noqa: E501
     """
     if not payload:
         raise ValidationError(400, 'Couldn\'t parse JSON POST body.')
-    if not payload.get('id'):
-        raise ValidationError(400, 'No id field specified')
     try:
-        operator = Operator.update(payload).where(id=operator_id).execute()
-    except Exception as exc:
+        operator = Operator.get_by_id(operator_id)
+        operator.expression_id = payload['expression_id']
+        operator.rank = payload['rank']
+        operator.value = payload['value']
+        operator.type = payload['type']
+        operator.save()
+    except peewee.IntegrationException as exc:
         raise ValidationError(400, 'Expression not found!')
     return flask.jsonify({'id': operator_id})
