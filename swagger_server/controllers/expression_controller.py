@@ -1,4 +1,8 @@
+import flask
+
 from swagger_server import util
+from swagger_server.models.expression import Expression
+from swagger_server.util import ValidationError
 
 
 def add_expression():  # noqa: E501
@@ -9,7 +13,12 @@ def add_expression():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    try:
+        Expression.create()
+    except Exception as exc:
+        raise ValidationError(400, 'Expression was not created')
+
+    return flask.jsonify(True)
 
 
 def delete_expression(expression_id):  # noqa: E501

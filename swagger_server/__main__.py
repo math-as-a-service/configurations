@@ -18,9 +18,14 @@ setup_cli = flask.cli.AppGroup('setup')
 # ROUTES!
 # ------------------------------------------------------------------------------
 
+
 @app.route('/expression', methods=['POST'])
 def post_expression_view():
-    return add_expression()
+    try:
+        return add_expression(), 200
+    except Exception as exc:
+        raise
+
 
 @app.route('/expression/<int:expression_id>', methods=['GET'])
 def get_expression_view(expression_id):
