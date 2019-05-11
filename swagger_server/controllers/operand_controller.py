@@ -30,7 +30,7 @@ def add_operand(payload):  # noqa: E501
                                  type=payload['type'])
     except IntegrityError as exc:
         raise ValidationError(400, 'Expression not found!')
-    return flask.jsonify(operand.api_serialize())
+    return flask.jsonify({'operand_id': operand.id})
 
 
 def delete_operand(operand_id):  # noqa: E501
