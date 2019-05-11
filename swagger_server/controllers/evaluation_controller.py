@@ -15,7 +15,7 @@ def add_evaluation(payload):  # noqa: E501
 
     :rtype: None
     """
-    if not payload:
+    if not payload or not isinstance(payload, dict) :
         raise ValidationError(400, 'Couldn\'t parse JSON POST body.')
     if not payload.get('expression_id'):
         raise ValidationError(400, 'No expression_id field specified')
