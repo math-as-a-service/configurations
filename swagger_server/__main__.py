@@ -3,7 +3,8 @@
 import flask
 from flask import request
 
-from swagger_server.controllers.expression_controller import add_expression, get_expression
+from swagger_server.controllers.expression_controller import add_expression, delete_expression, get_expression, \
+    put_expression
 from swagger_server.controllers.evaluation_controller import add_evaluation, get_evaluation
 from swagger_server.controllers.operand_controller import add_operand, delete_operand, get_operand, put_operand
 from swagger_server.controllers.operator_controller import add_operator, delete_operator, get_operator, put_operator
@@ -25,11 +26,34 @@ setup_cli = flask.cli.AppGroup('setup')
 
 @app.route('/expression', methods=['POST'])
 def post_expression_view():
-    return add_expression()
+    try:
+        return add_expression(), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
+
+
+@app.route('/expression/<int:expression_id>', methods=['DELETE'])
+def delete_expression_view(expression_id):
+    try:
+        return delete_expression(expression_id), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
+
 
 @app.route('/expression/<int:expression_id>', methods=['GET'])
 def get_expression_view(expression_id):
-    return get_expression(expression_id)
+    try:
+        return get_expression(expression_id), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
+
+
+@app.route('/expression/<int:expression_id>', methods=['PUT'])
+def put_expression_view(expression_id):
+    try:
+        return put_expression(expression_id), 200
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 #
 # EVALUATION!
