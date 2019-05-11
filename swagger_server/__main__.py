@@ -104,9 +104,14 @@ def put_operator_view(id):
 @app.route('/result/<int:result_id>', methods=['GET'])
 def get_result_view(result_id):
     if not result_id:
-        raise ValidationError(400, 'An evaluation result ID is required!')
+        return jsonify_validation_error(
+            ValidationError(400, 'An evaluation result ID is required!')
+        )
 
-    return get_result(result_id)
+    try:
+        return get_result(result_id)
+    except ValidationError as exc:
+        return jsonify_validation_error(exc)
 
 #
 # COMMANDS!
