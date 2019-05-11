@@ -17,8 +17,8 @@ class Expression(Model, FlaskModel):
     """
 
     id = AutoField()
-    created = DateTimeField(default=datetime.datetime.now)
-    updated = DateTimeField(default=datetime.datetime.now)
+    created = DateTimeField(default=datetime.now)
+    updated = DateTimeField(default=datetime.now)
 
     def __init__(self, id: int=None, created: datetime=None, updated: datetime=None):  # noqa: E501
         """Expression - a model defined in Swagger
