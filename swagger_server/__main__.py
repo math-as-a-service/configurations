@@ -10,7 +10,7 @@ from swagger_server.controllers.result_controller import get_result
 from swagger_server.database.utils import create_database, create_table
 
 app = flask.Flask(__name__)
-setup_cli = flask.AppGroup('setup')
+setup_cli = flask.cli.AppGroup('setup')
 
 #
 # ROUTES!

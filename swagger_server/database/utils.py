@@ -8,7 +8,8 @@ from swagger_server.models.expression import Expression
 from swagger_server.models.operand import Operand
 from swagger_server.models.operator import Operator
 from swagger_server.models.result import Result
-from swagger_server.models.value_type import ValueType
+
+from peewee import MySQLDatabase
 
 
 MODEL_CONSTRUCTORS = [
@@ -18,7 +19,6 @@ MODEL_CONSTRUCTORS = [
     Operand,
     Operator,
     Result,
-    ValueType,
 ]
 
 connection = pymysql.connect(
@@ -26,11 +26,12 @@ connection = pymysql.connect(
     user='root',
     password='',
 )
+database = MySQLDatabase('maas', user='maas_user', password='maas_password')
 
 def create_table():
     # http://docs.peewee-orm.com/en/2.10.2/peewee/models.html?highlight=create_table#creating-model-tables
     for model in MODEL_CONSTRUCTORS:
-        model.create_table()
+        database.create_tables([model])
 
 def create_database():
     with connection.cursor() as cursor:
