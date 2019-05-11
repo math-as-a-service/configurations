@@ -57,10 +57,10 @@ def get_evaluation(evaluation_id):  # noqa: E501
 
     return flask.jsonify(evaluation.api_serialize())
 
-def options_evaluation(evaluation_id):
+def get_evaluation_finalized_expression(evaluation_id):
     try:
         evaluation = Evaluation.get_by_id(evaluation_id)
     except DoesNotExist:
         raise ValidationError(404, 'Evaluation ID ({}) not found.'.format(evaluation_id))
 
-    return flask.jsonify(EvaluationService().get_finalized_expression(evaluation.id))
+    return flask.jsonify({ 'value': EvaluationService().get_finalized_expression(evaluation.id)} )

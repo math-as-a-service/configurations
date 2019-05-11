@@ -5,7 +5,7 @@ from flask import request
 
 from swagger_server.controllers.expression_controller import add_expression, delete_expression, get_expression, \
     put_expression
-from swagger_server.controllers.evaluation_controller import add_evaluation, get_evaluation, options_evaluation
+from swagger_server.controllers.evaluation_controller import add_evaluation, get_evaluation, get_evaluation_finalized_expression
 from swagger_server.controllers.operand_controller import add_operand, delete_operand, get_operand, put_operand
 from swagger_server.controllers.operator_controller import add_operator, delete_operator, get_operator, put_operator
 from swagger_server.controllers.result_controller import get_result
@@ -75,10 +75,10 @@ def get_evaluation_view(evaluation_id):
     except ValidationError as exc:
         return jsonify_validation_error(exc)
 
-@app.route('/evaluation/<int:evaluation_id>', methods=['OPTIONS'])
-def options_evaluation_view(evaluation_id):
+@app.route('/evaluation/<int:evaluation_id>/view', methods=['GET'])
+def get_evaluation_finalized_expression_view(evaluation_id):
     try:
-        return options_evaluation(evaluation_id)
+        return get_evaluation_finalized_expression(evaluation_id)
     except ValidationError as exc:
         return jsonify_validation_error(exc)
 
