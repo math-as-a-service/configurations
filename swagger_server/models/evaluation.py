@@ -18,3 +18,6 @@ class Evaluation(FlaskModel):
     expression_id = ForeignKeyField(Expression)
     result_id = IntegerField()
     status = SmallIntegerField()
+
+    def is_complete(self):
+        self.status == self.FINISHED
