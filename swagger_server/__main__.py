@@ -7,14 +7,18 @@ from swagger_server.controllers.evaluation_controller import add_evaluation, get
 from swagger_server.controllers.operand_controller import add_operand, delete_operand, get_operand, put_operand
 from swagger_server.controllers.operator_controller import add_operator, delete_operator, get_operator, put_operator
 from swagger_server.controllers.result_controller import get_result
+from swagger_server.database.utils import create_database, create_table
 
 app = flask.Flask(__name__)
+setup_cli = flask.AppGroup('setup')
 
+#
+# ROUTES!
+# ------------------------------------------------------------------------------
 
 @app.route('/expression', methods=['POST'])
 def post_expression_view():
     return add_expression()
-
 
 @app.route('/expression/<int:expression_id>', methods=['GET'])
 def get_expression_view(expression_id):
@@ -72,7 +76,17 @@ def get_operator_view(id):
 def put_operator_view(id):
     return put_operator(id)
 
-
 @app.route('/result/<int:id>', methods=['GET'])
 def get_result_view(id):
     return get_result(id)
+
+#
+# COMMANDS!
+# ------------------------------------------------------------------------------
+
+@setup_cli.command()
+def database():
+    create_database()
+    create_table()
+
+app.cli.add_command(setup_cli)
