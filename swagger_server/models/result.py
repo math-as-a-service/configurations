@@ -20,32 +20,6 @@ class Result(FlaskModel):
     value = CharField()
     type = SmallIntegerField()
 
-    def __init__(self, id: int=None, value: str=None, type: int=None):  # noqa: E501
-        """Result - a model defined in Swagger
-
-        :param id: The id of this Result.  # noqa: E501
-        :type id: int
-        :param value: The value of this Result.  # noqa: E501
-        :type value: str
-        :param type: The type of this Result.  # noqa: E501
-        :type type: int
-        """
-        self.swagger_types = {
-            'id': int,
-            'value': str,
-            'type': int
-        }
-
-        self.attribute_map = {
-            'id': 'id',
-            'value': 'value',
-            'type': 'type'
-        }
-
-        self._id = id
-        self._value = value
-        self._type = type
-
     @classmethod
     def from_dict(cls, dikt) -> 'Result':
         """Returns the dict as a model

@@ -15,27 +15,6 @@ class ValueType(FlaskModel):
     Do not edit the class manually.
     """
 
-    def __init__(self, id: int=None, label: str=None):  # noqa: E501
-        """ValueType - a model defined in Swagger
-
-        :param id: The id of this ValueType.  # noqa: E501
-        :type id: int
-        :param label: The label of this ValueType.  # noqa: E501
-        :type label: str
-        """
-        self.swagger_types = {
-            'id': int,
-            'label': str
-        }
-
-        self.attribute_map = {
-            'id': 'id',
-            'label': 'label'
-        }
-
-        self._id = id
-        self._label = label
-
     @classmethod
     def from_dict(cls, dikt) -> 'ValueType':
         """Returns the dict as a model

@@ -20,32 +20,6 @@ class Expression(Model, FlaskModel):
     created = DateTimeField(default=datetime.now)
     updated = DateTimeField(default=datetime.now)
 
-    def __init__(self, id: int=None, created: datetime=None, updated: datetime=None):  # noqa: E501
-        """Expression - a model defined in Swagger
-
-        :param id: The id of this Expression.  # noqa: E501
-        :type id: int
-        :param created: The created of this Expression.  # noqa: E501
-        :type created: datetime
-        :param updated: The updated of this Expression.  # noqa: E501
-        :type updated: datetime
-        """
-        self.swagger_types = {
-            'id': int,
-            'created': datetime,
-            'updated': datetime
-        }
-
-        self.attribute_map = {
-            'id': 'id',
-            'created': 'created',
-            'updated': 'updated'
-        }
-
-        self._id = id
-        self._created = created
-        self._updated = updated
-
     @classmethod
     def from_dict(cls, dikt) -> 'Expression':
         """Returns the dict as a model
