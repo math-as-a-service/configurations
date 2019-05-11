@@ -3,7 +3,8 @@
 import flask
 from flask import request
 
-from swagger_server.controllers.expression_controller import add_expression, get_expression
+from swagger_server.controllers.expression_controller import add_expression, delete_expression, get_expression, \
+    put_expression
 from swagger_server.controllers.evaluation_controller import add_evaluation, get_evaluation
 from swagger_server.controllers.operand_controller import add_operand, delete_operand, get_operand, put_operand
 from swagger_server.controllers.operator_controller import add_operator, delete_operator, get_operator, put_operator
@@ -27,9 +28,19 @@ def post_expression_view():
         raise
 
 
+@app.route('/expression/<int:expression_id>', methods=['DELETE'])
+def delete_expression_view(expression_id):
+    return delete_expression(expression_id)
+
+
 @app.route('/expression/<int:expression_id>', methods=['GET'])
 def get_expression_view(expression_id):
     return get_expression(expression_id)
+
+
+@app.route('/expression/<int:expression_id>', methods=['PUT'])
+def put_expression_view(expression_id):
+    return put_expression(expression_id)
 
 
 @app.route('/evaluation', methods=['POST'])
