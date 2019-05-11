@@ -14,9 +14,8 @@ def post_expression_view():
     return add_expression()
 
 
-@app.route('/expression', methods=['GET'])
-def get_expression_view():
-    expression_id = flask.request.json['expression_id']
+@app.route('/expression/<int:expression_id>', methods=['GET'])
+def get_expression_view(expression_id):
     return get_expression(expression_id)
 
 
@@ -25,9 +24,8 @@ def post_evaluation_view():
     return add_evaluation()
 
 
-@app.route('/evaluation', methods=['GET'])
-def get_evaluation_view():
-    evaluation_id = flask.request.json['evaluation_id']
+@app.route('/evaluation/<int:evaluation_id>', methods=['GET'])
+def get_evaluation_view(evaluation_id):
     return get_evaluation(evaluation_id)
 
 
