@@ -5,13 +5,9 @@ from swagger_server.models.expression import Expression
 from swagger_server.util import ValidationError
 
 
-def add_expression():  # noqa: E501
-    """Create an empty expression
-
-    Creates an empty expression # noqa: E501
-
-
-    :rtype: None
+def add_expression():
+    """
+    Create an empty expression
     """
     try:
         result = Expression.create()
@@ -21,30 +17,17 @@ def add_expression():  # noqa: E501
     return flask.jsonify(result.api_serialize())
 
 
-def delete_expression(expression_id):  # noqa: E501
-    """Delete expression object - will not throw exception if invalid expression_id is passed
-
-    Delete expression object # noqa: E501
-
-    :param expression_id: ID of expression to return
-    :type expression_id: int
-
-    :rtype: None
+def delete_expression(expression_id):
     """
-    row = Expression.get_or_none(Expression.id == expression_id)
-    result = row.delete_instance() if row else 0
+    Delete expression object - will not throw exception if invalid expression_id is passed
+    """
+    result = Expression.delete_by_id(expression_id)
     return flask.jsonify({'expression_id': expression_id, 'rows_deleted': result})
 
 
-def get_expression(expression_id):  # noqa: E501
-    """Retrieve expression object - will throw exception if invalid expression_id is passed
-
-    Retrieve expression object # noqa: E501
-
-    :param expression_id: ID of expression to return
-    :type expression_id: int
-
-    :rtype: None
+def get_expression(expression_id):
+    """
+    Retrieve expression object - will throw exception if invalid expression_id is passed
     """
     try:
         result = Expression.get_by_id(expression_id)
@@ -54,15 +37,9 @@ def get_expression(expression_id):  # noqa: E501
     return flask.jsonify(result.api_serialize())
 
 
-def put_expression(expression_id):  # noqa: E501
-    """Update expression object
-
-    Update expression object # noqa: E501
-
-    :param expression_id: ID of expression to return
-    :type expression_id: int
-
-    :rtype: None
+def put_expression(expression_id):
+    """
+    Update expression object
     """
     try:
         row = Expression.get_by_id(expression_id)
