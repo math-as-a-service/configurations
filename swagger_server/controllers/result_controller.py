@@ -1,5 +1,5 @@
 from swagger_server.models.result import Result
-from swagger_server.models.evalution import Evaluation
+from swagger_server.models.evaluation import Evaluation
 from swagger_server.util import ValidationError
 from peewee import DoesNotExist
 import flask
