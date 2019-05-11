@@ -30,8 +30,8 @@ class EvaluationService(object):
 
         result = Result.get_by_id(result_id)
 
-        operands = Operand.get(Operand.expression_id == expression_id)
-        operators = Operator.get(Operator.expression_id == expression_id)
+        operands = Operand.select().where(Operand.expression_id == expression_id)
+        operators = Operator.select().where(Operator.expression_id == expression_id)
         operands_valid = self.validate_operands(operands)
         operators_valid = self.validate_operators(operators)
         valid = operands_valid and operators_valid
