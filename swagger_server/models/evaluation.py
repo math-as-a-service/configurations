@@ -6,8 +6,8 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 from peewee import *
 
+from .expression import Expression
 from swagger_server.models.base_model_ import FlaskModel
-from swagger_server.models import Expression
 from swagger_server import util
 
 
@@ -21,37 +21,6 @@ class Evaluation(FlaskModel):
     expression_id = ForeignKeyField(Expression)
     result_id = IntegerField()
     status = SmallIntegerField()
-
-    def __init__(self, id: int=None, expression_id: int=None, result_id: int=None, status: int=None):  # noqa: E501
-        """Evaluation - a model defined in Swagger
-
-        :param id: The id of this Evaluation.  # noqa: E501
-        :type id: int
-        :param expression_id: The expression_id of this Evaluation.  # noqa: E501
-        :type expression_id: int
-        :param result_id: The result_id of this Evaluation.  # noqa: E501
-        :type result_id: int
-        :param status: The status of this Evaluation.  # noqa: E501
-        :type status: int
-        """
-        self.swagger_types = {
-            'id': int,
-            'expression_id': int,
-            'result_id': int,
-            'status': int
-        }
-
-        self.attribute_map = {
-            'id': 'id',
-            'expression_id': 'expression_id',
-            'result_id': 'result_id',
-            'status': 'status'
-        }
-
-        self._id = id
-        self._expression_id = expression_id
-        self._result_id = result_id
-        self._status = status
 
     @classmethod
     def from_dict(cls, dikt) -> 'Evaluation':

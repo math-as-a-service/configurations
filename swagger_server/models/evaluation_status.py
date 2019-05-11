@@ -19,27 +19,6 @@ class EvaluationStatus(FlaskModel):
     id = AutoField()
     label = CharField()
 
-    def __init__(self, id: int=None, label: str=None):  # noqa: E501
-        """EvaluationStatus - a model defined in Swagger
-
-        :param id: The id of this EvaluationStatus.  # noqa: E501
-        :type id: int
-        :param label: The label of this EvaluationStatus.  # noqa: E501
-        :type label: str
-        """
-        self.swagger_types = {
-            'id': int,
-            'label': str
-        }
-
-        self.attribute_map = {
-            'id': 'id',
-            'label': 'label'
-        }
-
-        self._id = id
-        self._label = label
-
     @classmethod
     def from_dict(cls, dikt) -> 'EvaluationStatus':
         """Returns the dict as a model
