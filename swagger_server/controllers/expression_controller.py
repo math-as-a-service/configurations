@@ -1,3 +1,4 @@
+import datetime
 import flask
 
 from swagger_server.models.expression import Expression
@@ -21,7 +22,7 @@ def add_expression():  # noqa: E501
 
 
 def delete_expression(expression_id):  # noqa: E501
-    """Delete expression object
+    """Delete expression object - will not throw exception if invalid expression_id is passed
 
     Delete expression object # noqa: E501
 
@@ -36,7 +37,7 @@ def delete_expression(expression_id):  # noqa: E501
 
 
 def get_expression(expression_id):  # noqa: E501
-    """Retrieve expression object
+    """Retrieve expression object - will throw exception if invalid expression_id is passed
 
     Retrieve expression object # noqa: E501
 
@@ -45,7 +46,7 @@ def get_expression(expression_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return Expression.get_by_id(expression_id)
 
 
 def put_expression(expression_id):  # noqa: E501
@@ -58,4 +59,7 @@ def put_expression(expression_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    row = Expression.get_by_id(expression_id)
+    row.updated = datetime.datetime.now()
+    result = row.save()
+    return flask.jsonify({'expression_id': expression_id, 'updated': result})
