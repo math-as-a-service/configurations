@@ -7,12 +7,9 @@ from swagger_server.models.result import Result
 
 from peewee import *
 
-VALID_OPERATORS = {'+', '-', '/', '*', '**', '%', '//'}
+VALID_OPERANDS = {'+', '-', '/', '*', '**', '%', '//', '<', '>', '<=', '>=', '=='}
 
 class EvaluationService(object):
-
-    def __init__(self, input_checked=True):
-        self.input_checked = input_checked
 
     def evaluate_expression(self, evaluation_id):
         try:
@@ -66,7 +63,6 @@ class EvaluationService(object):
 
     def validate_operators(self, operators):
         return all([operator.value in VALID_OPERATORS for operator in operators])
-
 
     def validate_operands(self, operands):
         for operand in operands:
