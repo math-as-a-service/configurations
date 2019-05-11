@@ -54,7 +54,7 @@ def get_operand(operand_id):  # noqa: E501
     try:
         operand = Operand.get_by_id(operand_id)
     except Exception as exc:
-        raise ValidationError(400, 'Expression not found!')
+        raise ValidationError(404, 'Operand not found!')
     return flask.jsonify({'id': operand_id})
 
 
