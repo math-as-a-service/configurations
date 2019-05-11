@@ -18,7 +18,7 @@ def add_operand(payload):  # noqa: E501
     if not payload.get('expression_id'):
         raise ValidationError(400, 'No id field specified')
     try:
-        operator = Operand.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
+        operand = Operand.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
     except Exception as exc:
         raise ValidationError(400, 'Expression not found!')
     return flask.jsonify({'expression_id': operator.expression_id})
