@@ -24,11 +24,13 @@ def add_operand(payload):  # noqa: E501
         raise ValidationError(400, 'No value field specified')
     if not payload.get('type'):
         raise ValidationError(400, 'No type field specified')
+
     try:
-        operand = Operand.create(expression_id=payload.expression_id, rank=payload.rank, value=payload.value, type=payload.type)
+        operand = Operand.create(expression_id=payload['expression_id'], rank=payload['rank'], value=payload['value'],
+                                 type=payload['type'])
     except IntegrityError as exc:
         raise ValidationError(400, 'Expression not found!')
-    return flask.jsonify({'operand_id': operand.id})
+    return flask.jsonify(operand.api_serialize())
 
 
 def delete_operand(operand_id):  # noqa: E501
