@@ -24,54 +24,45 @@ setup_cli = flask.cli.AppGroup('setup')
 # EXPRESSIONS!
 # ------------------------------------------------------------------------------
 
-@app.route('/expression', methods=['POST'])
-def post_expression_view():
+def get_handler_for_object_type(object_type, http_method):
+    # TODO: Is this terrible? It's enough metaprogramming such that IDEs won't be able to pick up that imports are used.
+    if http_method == 'POST':
+        lookup_method = 'add'
+    else:
+        lookup_method = http_method.lower()
+    return globals()['{}_{}'.format(lookup_method, object_type)]
+
+@app.route('/<object_type>', methods=['POST'])
+def post_view_handler(object_type):
+    handler = get_handler_for_object_type(object_type, 'POST')
+    # Expression is special - might be a better way to tackle this.
+    if object_type == 'expression':
+        try:
+            return handler(), 200
+        except ValidationError as exc:
+            return jsonify_validation_error(exc)
+    else:
+        try:
+            post_body = request.get_json()
+            return handler(post_body), 200
+        except ValidationError as exc:
+            return jsonify_validation_error(exc)
+
+
+@app.route('/<object_type>/<int:object_id>', methods=['GET', 'DELETE'])
+def get_and_delete_view_handler(object_type, object_id):
+    handler = get_handler_for_object_type(object_type, request.method)
     try:
-        return add_expression(), 200
+        return handler(object_id), 200
     except ValidationError as exc:
         return jsonify_validation_error(exc)
 
-
-@app.route('/expression/<int:expression_id>', methods=['DELETE'])
-def delete_expression_view(expression_id):
-    try:
-        return delete_expression(expression_id), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-
-@app.route('/expression/<int:expression_id>', methods=['GET'])
-def get_expression_view(expression_id):
-    try:
-        return get_expression(expression_id), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-
-@app.route('/expression/<int:expression_id>', methods=['PUT'])
-def put_expression_view(expression_id):
-    try:
-        return put_expression(expression_id), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-#
-# EVALUATION!
-# ------------------------------------------------------------------------------
-
-@app.route('/evaluation', methods=['POST'])
-def post_evaluation_view():
+@app.route('/<object_type>/<int:object_id>', methods=['PUT'])
+def put_view_handler(object_type, object_id):
+    handler = get_handler_for_object_type(object_type, 'PUT')
     try:
         post_body = request.get_json()
-        return add_evaluation(post_body), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-
-@app.route('/evaluation/<int:evaluation_id>', methods=['GET'])
-def get_evaluation_view(evaluation_id):
-    try:
-        return get_evaluation(evaluation_id)
+        return handler(object_id, post_body), 200
     except ValidationError as exc:
         return jsonify_validation_error(exc)
 
@@ -81,88 +72,6 @@ def get_evaluation_finalized_expression_view(evaluation_id):
         return get_evaluation_finalized_expression(evaluation_id)
     except ValidationError as exc:
         return jsonify_validation_error(exc)
-
-#
-# OPERAND!
-# ------------------------------------------------------------------------------
-
-@app.route('/operand', methods=['POST'])
-def add_operand_view():
-    """
-    Requires a json in this format:
-    {
-        "expression_id": 1,
-         "rank": 2,
-         "value": "3",
-         "type": 4
-    }
-    """
-    try:
-        post_body = request.get_json()
-        return add_operand(post_body), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-@app.route('/operand/<int:id>', methods=['DELETE'])
-def delete_operand_view(id):
-    try:
-        return delete_operand(id), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-@app.route('/operand/<int:id>', methods=['GET'])
-def get_operand_view(id):
-    try:
-        return get_operand(id), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-
-@app.route('/operand/<int:id>', methods=['PUT'])
-def put_operand_view(id):
-    try:
-        post_body = request.get_json()
-        return put_operand(id, post_body), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-#
-# OPERATOR!
-# ------------------------------------------------------------------------------
-
-@app.route('/operator', methods=['POST'])
-def add_operator_view():
-    try:
-        post_body = request.get_json()
-        return add_operator(post_body), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-
-@app.route('/operator/<int:id>', methods=['DELETE'])
-def delete_operator_view(id):
-    try:
-        return delete_operator(id), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-
-@app.route('/operator/<int:id>', methods=['GET'])
-def get_operator_view(id):
-    try:
-        return get_operator(id), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
-
-@app.route('/operator/<int:id>', methods=['PUT'])
-def put_operator_view(id):
-    try:
-        post_body = request.get_json()
-        return put_operator(id, post_body), 200
-    except ValidationError as exc:
-        return jsonify_validation_error(exc)
-
 #
 # RESULT!
 # ------------------------------------------------------------------------------
